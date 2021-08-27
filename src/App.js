@@ -9,11 +9,9 @@ import './App.css';
 
 
 function App() {
-  
   const [user] = useAuthState(firebase.auth());
-  console.log('user ->', user);
   return (
-    <Routes />
+    <Routes user={user} />
   );
 }
 

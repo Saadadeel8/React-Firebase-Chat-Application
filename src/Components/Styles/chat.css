@@ -1,6 +1,6 @@
 @import '~antd/dist/antd.css';
 
-.chatHistory{
+.chat-history{
     background-color: #175676;
     height: 600px;
     width: 400px;
@@ -10,7 +10,7 @@
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   
 }
-.chatMessages{
+.chat-messages{
     display: block;
     background-color: #4BA3C3;
     width: 1000px;
@@ -19,7 +19,7 @@
     transform: translate(-80px, 60px);
 }
 
-.chatTyping{
+.chat-typing{
     display: block;
     background-color: #CCE6F4;
     width: 1000px;
@@ -29,14 +29,14 @@
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
-.textArea{
+.text-area{
     display: flexbox;
     align-items: flex-start;
     height: 80%;
     
 }
 
-.sendIcon{
+.send-icon{
     float: right;
     background-color: #e5e7e2da;
     border: none;

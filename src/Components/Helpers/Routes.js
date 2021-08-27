@@ -6,28 +6,20 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link,
-    Redirect,
-    useHistory,
-    useLocation
   } from "react-router-dom";
-import userEvent from '@testing-library/user-event';
 
-function Routes() {
+function Routes(user) {
     return (
-        
             <Router>
-            <div className="App">
-            <Switch>
-            <Route exact path="/" component={Signup}/>
-            <Route exact path="/Login" component={Login}/>
-            {user.uid?
-            <Route exact path="/ChatPreview" component={ChatPreview}/> : <Route exact path="/login" component={Login}/>}
-            </Switch>
-            </div>
+              <div className="App">
+                <Switch>
+                  <Route exact path="/" component={Signup}/>
+                  <Route exact path="/Login" component={Login}/>
+                  {user.uid?
+                  <Route exact path="/ChatPreview" component={ChatPreview}/> : <Route exact path="/Login" component={Login}/>}
+                </Switch>
+              </div>
             </Router>
-        
     )
 }
-
 export default Routes

@@ -7,7 +7,7 @@ h1 {
 label {
   margin-bottom: 30px;
 }
-.stockImage {
+.stock-image {
   float: right;
   margin-top: 3%;
   margin-right: 16%;
@@ -17,7 +17,7 @@ img {
   border-radius: 0 10px 10px 0;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
-.UserForm{
+.user-form{
   font-family:'Montserrat', 'sans-serif';
   display: flex;
   flex-wrap: wrap;

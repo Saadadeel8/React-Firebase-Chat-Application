@@ -10,14 +10,14 @@ export default function ChatPreview() {
 
     }
     return (
-        <div className='chatScreen'>
-            <div className='chatHistory'></div>
-            <div className='chatSection'>
-            <div className='chatMessages'></div>
-            <div className='chatTyping'>
-            <div className='textArea'><TextArea row={2} maxLength={100} bordered onPressEnter={handleMessage}/></div>
-            <div className='sendIcon'><button><SendOutlined /></button></div>
-            </div>
+        <div className='chat-screen'>
+            <div className='chat-history'></div>
+            <div className='chat-section'>
+                <div className='chat-messages'></div>
+                <div className='chat-typing'>
+                    <div className='text-area'><TextArea row={2} maxLength={100} bordered onPressEnter={handleMessage}/></div>
+                    <div className='send-icon'><button><SendOutlined /></button></div>
+                </div>
             </div>
         </div>
     )

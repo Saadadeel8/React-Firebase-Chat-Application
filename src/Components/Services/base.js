@@ -13,3 +13,4 @@ const firebaseConfig = firebase.initializeApp({
   console.log(process.env.REACT_APP_FIREBASE_KEY)
   export const auth = firebaseConfig.auth()
   export default firebaseConfig
+  
