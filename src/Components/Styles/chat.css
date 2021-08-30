@@ -1,0 +1,56 @@
+@import '~antd/dist/antd.css';
+
+.chat-history{
+    background-color: #175676;
+    height: 600px;
+    width: 400px;
+    display: block;
+    float: left;
+    transform: translate(80px, 60px);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  
+}
+.chat-messages{
+    display: block;
+    background-color: #4BA3C3;
+    width: 1000px;
+    height: 540px;
+    float: right;
+    transform: translate(-80px, 60px);
+}
+
+.chat-typing{
+    display: block;
+    background-color: #CCE6F4;
+    width: 1000px;
+    height: 60px;
+    float: right;
+    transform: translate(-80px, 60px);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.text-area{
+    display: flexbox;
+    align-items: flex-start;
+    height: 80%;
+    
+}
+
+.send-icon{
+    float: right;
+    background-color: #e5e7e2da;
+    border: none;
+    color: rgb(58, 58, 58);
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    transform: translate(-40px, -45px);
+    border-radius: 50%;
+    
+}
+button{
+    border-radius: 50%;
+    cursor: pointer;
+}
