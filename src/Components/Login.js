@@ -3,6 +3,7 @@ import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import firebase from "firebase/app";
 import 'firebase/auth';
+import {auth} from './Services/base';
 import {
   Link,
   useHistory
@@ -15,11 +16,13 @@ export default function Login() {
   const history = useHistory();
 
   const handleSubmit = (values) => {
-    firebase.auth().signInWithEmailAndPassword(values.email, values.password)
+    auth.signInWithEmailAndPassword(values.email, values.password)
     .then((userCredential) => {
     // Signed in
-    history.push('/ChatPreview')
+    
+    history.push('/ChatPreview');
     var user = userCredential.user;
+    console.log(user);
     })
     .catch(() => {
       setError(true)
@@ -34,7 +37,7 @@ export default function Login() {
           description="Username or Password is wrong"
           type="error"
           showIcon
-        />: null};
+        />: null}
         <label><h1>Login</h1></label> 
         <Form
           name="normal_login"

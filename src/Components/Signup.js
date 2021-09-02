@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
 import firebase from "firebase/app";
 import "firebase/auth";
+import { db,auth } from './Services/base';
 import preview from './preview.jpg';
 import {
     Link,
@@ -11,17 +12,12 @@ import {
 export default function Signup() {
 
   const history = useHistory();
-  const [fields, setFields] = useState([
-    {
-      name: ['username'],
-      value: '',
-    },
-    ]);
+  const [fields, setFields] = useState([{name: ['username'], value: '',},]);
 
   const handleSubmit = (values) => { 
     const {email, password, fullname, phone} = values
    
-    firebase.auth().createUserWithEmailAndPassword(email, password)
+    auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
       // Signed in 
       const user = userCredential.user;
@@ -30,16 +26,25 @@ export default function Signup() {
         phoneNumber: phone,
       });
       alert('Signed up successfully')
+      db.collection("users").doc(user.uid).set({
+        uid: user.uid,
+        Name: fullname,
+        Contacts:[]
+      })
+      .then(() => {
+          console.log("Document successfully written!");
+      })
+      .catch((error) => {
+          console.error("Error writing document: ", error);
+      });
       history.push('/Login')
-      // ...
-    })
+      })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-    // ..
+      console.log(error)
     })};
+    
   const CustomizedForm = () => ( 
-    <div className='user-form'>
+    <div>
       <label>
         <h1>User Sign Up</h1>
       </label>
@@ -117,16 +122,18 @@ export default function Signup() {
           <br /><br />Already have an account?   <Link to={"/Login"}> Login</Link>
           </Form.Item></div>
       </Form>
-    </div>
+      </div>
   );
   return (
     <div className='Interface'>
+      <div className='user-form'>
       <CustomizedForm
         fields={fields}
         onChange={(newFields) => {
           setFields(newFields);
         }}
       />
+      </div>
       <div className='stock-image'><img src={preview} height='600px' width='800px'/></div>
     </div>
   );

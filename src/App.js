@@ -1,8 +1,7 @@
 import React from 'react';
 require('dotenv').config();
 import firebase from "firebase/app";
-import "firebase/auth";
-import firebaseConfig from './Components/Services/base'
+import PropTypes from 'prop-types';
 import Routes from './Components/Helpers/Routes'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import './App.css';
@@ -10,9 +9,13 @@ import './App.css';
 
 function App() {
   const [user] = useAuthState(firebase.auth());
+  console.log(user)
   return (
     <Routes user={user} />
   );
 }
 
+App.propTypes = {
+  user: PropTypes.object
+}
 export default App;
