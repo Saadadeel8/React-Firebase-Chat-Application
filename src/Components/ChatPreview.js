@@ -1,18 +1,18 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import './Styles/chat.css';
-import { Input, Search } from 'antd';
+import { Input, Search, Tooltip, Button } from 'antd';
 import firebase from "firebase/app";
 import 'firebase/auth';
 import 'firebase/firestore';
-import { SendOutlined, LogoutOutlined} from '@ant-design/icons';
+import { SendOutlined, LogoutOutlined, PoweroffOutlined} from '@ant-design/icons';
 import { auth, db } from './Services/base';
 import {
     Link,
     useHistory
   } from "react-router-dom";
 
-export default function ChatPreview({user}) {
+const ChatPreview = ({user}) => {
     const { TextArea } = Input;
     const { Search } = Input;
     const history = useHistory();
@@ -24,40 +24,39 @@ export default function ChatPreview({user}) {
     const [receiver, setReceiver] = useState(''); //Data of contact/receiver
     const [messages, setMessages] = useState([]); //Container for messages
     const [selectedFriend, setSelectedFriend] = useState(''); //highlightling selected friend
+    const docRef = (receiver) => [user.displayName, receiver].sort().join("-");
 
     useEffect(() => {
         // Get all Messages from documents
         if(receiver.length){
-            db.collection("messages").doc([user.displayName, receiver].sort().join("-"))
+            db.collection('messages').doc(docRef(receiver))
             .onSnapshot(querySnapshot => {
-                var messages = [];
+                let messages = [];
                 const userMsgs = querySnapshot.data();
                 userMsgs.items.forEach((msg) => {messages.push(msg)});
                 console.log(messages)
                 setMessages(messages)
             })
         }
-        else{console.log('Select Receiver')}
-           
     }, [receiver.length])
+
     useEffect(() => {
         //Get data of All Users
-        db.collection("users")
+        db.collection('users')
         .onSnapshot((querySnapshot) => {
-            var users = [];
+            let users = [];
             querySnapshot.forEach((doc) => {
                 users.push({...doc.data()});
             });
             setSearchList(users);
-            console.log(users)
         })
     }, [])
 
     useEffect(() => {
         //Get Data of Added Friends
-        db.collection("users").doc(user.uid)
+        db.collection('users').doc(user.uid)
         .onSnapshot((querySnapshot) => {
-            var friends = [];
+            let friends = [];
             const userData = querySnapshot.data();
             userData.Contacts.forEach((contact) => {friends.push(contact)});
             setFriendList(friends);
@@ -66,7 +65,6 @@ export default function ChatPreview({user}) {
 
     const handleLogout = () => {
         auth.signOut()
-        console.log('You have logged out!')
         history.push('/Login')
     }
 
@@ -74,8 +72,7 @@ export default function ChatPreview({user}) {
         e.preventDefault();
         const { uid, displayName, photoURL } = user;
         const trimmedMessage = text.trim();
-        console.log(trimmedMessage);
-        const messagesRef = db.collection('messages').doc([user.displayName, receiver].sort().join("-"));
+        const messagesRef = db.collection('messages').doc(docRef(receiver));
         if (trimmedMessage) {
             // Add new message in Firestore
             messagesRef.update({
@@ -83,29 +80,28 @@ export default function ChatPreview({user}) {
             items: firebase.firestore.FieldValue.arrayUnion({
                 text: trimmedMessage,
                 uid,
-                displayName})
-            
+                displayName
+            })
             });
             // Clear input field
-            console.log("Message Sent")
             setText('');
         }
     }
 
-    const addFriend = (object) => {
-        const addFriend = db.collection("users").doc(user.uid)
+    const addFriend = (contact) => {
+        const addFriend = db.collection('users').doc(user.uid)
             addFriend.update({
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             Contacts: firebase.firestore.FieldValue.arrayUnion({
-                Name: object.Name,
-                uid: object.uid,
+                Name: contact.Name,
+                uid: contact.uid,
                 })
             });
             // Clear input field
-            console.log("Contact Added")
+            console.log('Contact Added')
             const { uid, displayName, photoURL } = user;
 
-        const newChat = db.collection('messages').doc([user.displayName, receiver].sort().join("-"));
+        const newChat = db.collection('messages').doc(docRef(receiver));
             // Add new message in Firestore
             newChat.set({
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -115,12 +111,12 @@ export default function ChatPreview({user}) {
                 displayName})
             });
             // Clear input field
-            console.log("Chat Started")
+            console.log('Chat Started')
     }
 
-    const initiateChat = (object) => {
-        setReceiver(object.Name)
-        setSelectedFriend(object.uid)
+    const initiateChat = (friend) => {
+        setReceiver(friend.Name)
+        setSelectedFriend(friend.uid)
     }
    
     return (
@@ -128,21 +124,23 @@ export default function ChatPreview({user}) {
             <div className='chat-history'>
                 <div className='search-bar'>
                     <div className='logout'>
-                    <a href=" " title="Sign Out" style={{color: 'white'}}><button onClick={handleLogout}><LogoutOutlined /></button></a>
+                    <Tooltip title='Logout'>
+                        <Button shape='circle' icon={<PoweroffOutlined /> } onClick={handleLogout}/>
+                    </Tooltip>
                     </div>
                     <Search placeholder="Enter Friend's Fullname" allowClear style={{ width: 200}} onChange={(e)=> setSearch(e.target.value)} onSearch={(e)=> setSearchResult(!searchResult)}/>
                 </div>
                 
                 {searchResult==true? 
                 <div className='gap'>
-                    {searchList.filter(user => user.Name.toLowerCase().includes(search)).map((object, index) => (
-                        <div className='show-friend' onClick={()=>addFriend(object)} key={index}><h2>{object.Name}</h2></div>
+                    {searchList.filter(user => user.Name.toLowerCase().includes(search)).map((contact, index) => (
+                        <div className='show-friend' onClick={()=>addFriend(contact)} key={index}><h2>{contact.Name}</h2></div>
                     ))}
                 </div> 
                 :<div className='gap'>
-                    {friendList.filter(user => user.Name.toLowerCase().includes(search)).map((object, index) => (
-                        <div className={selectedFriend === object.uid? 'selected-friend':'show-friend'} onClick={()=>initiateChat(object)} 
-                        key={index}><h2>{object.Name}</h2></div>
+                    {friendList.filter(user => user.Name.toLowerCase().includes(search)).map((friend, index) => (
+                        <div className={selectedFriend === friend.uid? 'selected-friend':'show-friend'} onClick={()=>initiateChat(friend)} 
+                        key={index}><h2>{friend.Name}</h2></div>
                     ))}
                 </div>}
             </div>
@@ -151,8 +149,8 @@ export default function ChatPreview({user}) {
                    <h1><div className='receiver-info'>{receiver}</div></h1>
                     {receiver ? 
                     messages.map((message, index) => (
-                    <div key={index} className={message.displayName === user.displayName ? "right-side" 
-                    : message.displayName === receiver ? "left-side" 
+                    <div key={index} className={message.displayName === user.displayName ? 'right-side'
+                    : message.displayName === receiver ? 'left-side'
                     : null }>
                     <p>{message.text}</p>
                     </div>
@@ -161,11 +159,12 @@ export default function ChatPreview({user}) {
                 </div>
                 <div className='chat-typing'>
                 <form onSubmit={handleMessage}>
-                    <div className='text-area'><TextArea value={text} onChange={(e) => setText(e.target.value)} placeholder="Enter Message" /></div>
-                    <div className='send-icon'><button type="submit" disabled={!text}><SendOutlined /></button></div>
+                    <div className='text-area'><TextArea value={text} onChange={(e) => setText(e.target.value)} placeholder='Enter Message' /></div>
+                    <div className='send-icon'><button type='submit' disabled={!text}><SendOutlined /></button></div>
                 </form>
                 </div>
             </div>
         </div>
     )
 }
+export default ChatPreview;

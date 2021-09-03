@@ -9,7 +9,7 @@ import {
     useHistory
   } from "react-router-dom";
 
-export default function Signup() {
+const Signup = () => {
 
   const history = useHistory();
   const [fields, setFields] = useState([{name: ['username'], value: '',},]);
@@ -138,3 +138,5 @@ export default function Signup() {
     </div>
   );
 }
+
+export default Signup; 
