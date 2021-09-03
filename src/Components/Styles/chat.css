@@ -199,3 +199,7 @@ textarea.ant-input{
     transform: translate(20px, 5px);
     border-radius: 50%;
 }
+.empty-chat{
+    transform: translateY(130px);
+    opacity: 70%;
+}

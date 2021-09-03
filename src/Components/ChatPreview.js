@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import './Styles/chat.css';
-import { Input, Search } from 'antd';
+import { Input, Search, Empty } from 'antd';
 import firebase from "firebase/app";
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -149,7 +149,7 @@ export default function ChatPreview({user}) {
             <div className='chat-section'>
                 <div className='chat-messages'>
                    <h1><div className='receiver-info'>{receiver}</div></h1>
-                    {receiver ? 
+                    {receiver.length ? 
                     messages.map((message, index) => (
                     <div key={index} className={message.displayName === user.displayName ? "right-side" 
                     : message.displayName === receiver ? "left-side" 
@@ -157,13 +157,14 @@ export default function ChatPreview({user}) {
                     <p>{message.text}</p>
                     </div>
                     )) 
-                    : null} 
+                    : <div className='empty-chat'><Empty /></div>} 
                 </div>
+                
                 <div className='chat-typing'>
-                <form onSubmit={handleMessage}>
-                    <div className='text-area'><TextArea value={text} onChange={(e) => setText(e.target.value)} placeholder="Enter Message" /></div>
-                    <div className='send-icon'><button type="submit" disabled={!text}><SendOutlined /></button></div>
-                </form>
+                  <form onSubmit={handleMessage}>
+                      <div className='text-area'><TextArea value={text} onChange={(e) => setText(e.target.value)} placeholder="Enter Message" /></div>
+                      <div className='send-icon'><button type="submit" disabled={!text}><SendOutlined /></button></div>
+                  </form>
                 </div>
             </div>
         </div>
