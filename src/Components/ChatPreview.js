@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import './Styles/chat.css';
-import { Input, Search, Tooltip, Button } from 'antd';
+import { Input, Search, Empty, Tooltip, Button } from 'antd';
 import firebase from "firebase/app";
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -147,7 +147,7 @@ const ChatPreview = ({user}) => {
             <div className='chat-section'>
                 <div className='chat-messages'>
                    <h1><div className='receiver-info'>{receiver}</div></h1>
-                    {receiver ? 
+                    {receiver.length ? 
                     messages.map((message, index) => (
                     <div key={index} className={message.displayName === user.displayName ? 'right-side'
                     : message.displayName === receiver ? 'left-side'
@@ -155,8 +155,9 @@ const ChatPreview = ({user}) => {
                     <p>{message.text}</p>
                     </div>
                     )) 
-                    : null} 
+                    : <div className='empty-chat'><Empty /></div>} 
                 </div>
+                
                 <div className='chat-typing'>
                 <form onSubmit={handleMessage}>
                     <div className='text-area'><TextArea value={text} onChange={(e) => setText(e.target.value)} placeholder='Enter Message' /></div>
