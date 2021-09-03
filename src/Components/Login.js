@@ -3,7 +3,7 @@ import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import firebase from "firebase/app";
 import 'firebase/auth';
-import {auth} from './Services/base';
+import { auth } from './Services/base';
 import {
   Link,
   useHistory
@@ -11,7 +11,7 @@ import {
 import { Alert } from 'antd';
 import preview from './preview.jpg';
 
-export default function Login() {
+const Login = () => {
   const [error, setError] = useState(false);
   const history = useHistory();
 
@@ -91,3 +91,5 @@ export default function Login() {
     </div>
   );
 };
+
+export default Login;

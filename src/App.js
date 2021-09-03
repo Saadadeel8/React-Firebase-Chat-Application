@@ -9,7 +9,6 @@ import './App.css';
 
 function App() {
   const [user] = useAuthState(firebase.auth());
-  console.log(user)
   return (
     <Routes user={user} />
   );
