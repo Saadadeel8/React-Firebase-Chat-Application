@@ -155,7 +155,13 @@ const ChatPreview = ({user}) => {
                     <p>{message.text}</p>
                     </div>
                     )) 
-                    : <div className='empty-chat'><Empty /></div>} 
+                    : <div className='empty-chat'><Empty
+                    description={
+                      <span>
+                        Select a Friend to start chatting
+                      </span>
+                    }
+                  /></div>} 
                 </div>
                 
                 <div className='chat-typing'>

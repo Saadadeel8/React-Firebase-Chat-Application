@@ -87,7 +87,7 @@ button{
     transform: translateX(10px);
 }
 .show-friend:hover{
-    opacity: 60%;
+    opacity: 0.6;
     cursor: pointer;
 }
 .show-friend>h2{
