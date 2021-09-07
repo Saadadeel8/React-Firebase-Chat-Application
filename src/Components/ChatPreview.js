@@ -101,7 +101,7 @@ const ChatPreview = ({user}) => {
             console.log('Contact Added')
             const { uid, displayName, photoURL } = user;
 
-        const newChat = db.collection('messages').doc(docRef(receiver));
+        const newChat = db.collection('messages').doc(docRef(contact.Name));
             // Add new message in Firestore
             newChat.set({
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -114,7 +114,7 @@ const ChatPreview = ({user}) => {
             console.log('Chat Started')
     }
 
-    const initiateChat = (friend) => {
+    const initiateChat = async (friend) => {
         setReceiver(friend.Name)
         setSelectedFriend(friend.uid)
     }
@@ -139,15 +139,18 @@ const ChatPreview = ({user}) => {
                 </div> 
                 :<div className='gap'>
                     {friendList.filter(user => user.Name.toLowerCase().includes(search)).map((friend, index) => (
-                        <div className={selectedFriend === friend.uid? 'selected-friend':'show-friend'} onClick={()=>initiateChat(friend)} 
+                        <div className={selectedFriend === friend.uid? 'selected-friend':'show-friend'} onClick={()=> initiateChat(friend)} 
                         key={index}><h2>{friend.Name}</h2></div>
                     ))}
                 </div>}
             </div>
-            <div className='chat-section'>
+            <div className='chat-section' style={ messages.displayName === user.displayName ? { float: 'right'} 
+            : messages.displayName === receiver ? {float: 'left'}
+        : null}>
                 <div className='chat-messages'>
                    <h1><div className='receiver-info'>{receiver}</div></h1>
-                    {receiver.length ? 
+                   
+                   {receiver.length ? 
                     messages.map((message, index) => (
                     <div key={index} className={message.displayName === user.displayName ? 'right-side'
                     : message.displayName === receiver ? 'left-side'
@@ -162,6 +165,7 @@ const ChatPreview = ({user}) => {
                       </span>
                     }
                   /></div>} 
+                  
                 </div>
                 
                 <div className='chat-typing'>

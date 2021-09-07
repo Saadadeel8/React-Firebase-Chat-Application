@@ -139,14 +139,8 @@ button{
     transform: translate(65px, -35px);
 }
 .left-side {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: flex-start;
-	position: relative;
+    margin-bottom: 20px;
     margin-left: 20px;
-    float: left;
 	max-width: 20em;
     min-width: 10px;
 	background-color: #fff;
@@ -154,15 +148,14 @@ button{
 	font-size: 1em;
 	border-radius: 0 1rem 1rem 1rem;
     box-shadow:	0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
-}
-.left-side>p:before {
-	border-bottom-color: #fff;
+    border-bottom-color: #fff;
 	filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, .1));
 }
+
 .right-side {
 	position: relative;
-    float: right;
-    margin-right: 20px;
+    margin-left: 70%;
+    margin-bottom: 20px;
 	max-width: 20em;
     min-width: 10px;
 	background-color: rgb(151, 178, 250);
@@ -170,11 +163,16 @@ button{
 	font-size: 1em;
 	border-radius: 1rem 0 1rem 1rem;
     box-shadow:	0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
+    border-bottom-color: rgb(151, 178, 250);
+	filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, .1));
+}
+.left-screen{
+    float: left;
     
 }
-.right-side:before {
-	border-bottom-color: rgb(151, 178, 250);
-	filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, .1));
+.right-screen{
+    float: right;
+    
 }
 textarea.ant-input{
     transform: translateY(5px);
