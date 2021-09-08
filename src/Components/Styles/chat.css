@@ -178,13 +178,16 @@ button{
     width: fit-content;
     display: flex;
 }
+
 .right-side {
 	position: relative;
+
     display: flex;
     justify-content: right;
     margin-left: 65%;
     width: auto;
     margin-bottom: 20px;
+
 	background-color: rgb(151, 178, 250);
 	padding: 1.125em 1.5em;
 	font-size: 1em;
@@ -192,6 +195,7 @@ button{
     box-shadow:	0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
     border-bottom-color: rgb(151, 178, 250);
 	filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, .1));
+
 }
 textarea.ant-input{
     transform: translateY(5px);
