@@ -5,21 +5,23 @@
 .chat-history{
     background-color: #175676;
     height: 600px;
-    width: 400px;
+    width: max-content;
     display: block;
     float: left;
     transform: translate(80px, 60px);
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     border-radius: 5px 5px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 .chat-messages{
-    display: block;
     background-color: #4BA3C3;
     width: 975px;
     height: 540px;
     float: right;
     transform: translate(-80px, 60px);
-   overflow-y: scroll;
+    overflow-y: auto
+    
 }
 .chat-typing{
     display: block;
@@ -51,7 +53,7 @@ button{
     cursor: pointer;
     background: rgba(76, 175, 80, 0.1)
 }
-.search-bar{
+.menu-bar{
     background-color: #1a6185;
     width: 400px;
     height: 60px;
@@ -59,6 +61,9 @@ button{
     float: left;
     border-radius: 5px 5px 20px 20px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.search-bar{
+    transform: translate(30px,-17px);
 }
 .new-message{
     float: right;
@@ -88,10 +93,32 @@ button{
 }
 .show-friend:hover{
     opacity: 0.6;
-    cursor: pointer;
 }
 .show-friend>h2{
     font-family: 'Raleway';
+    color: cornsilk;
+    font-weight: 500;
+    padding-left: 20px;
+    padding-top: 15px;
+}
+.all-users{
+    background-color: #2ca8ac;
+    color: rgb(255, 255, 255);
+    text-align: left;
+    justify-content: left;
+    margin-top: 5px;
+    width: 380px;
+    height: 70px;
+    display: block;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transform: translateX(10px);
+}
+.all-users:hover{
+    opacity: 0.6;
+}
+.all-users>h2{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: cornsilk;
     font-weight: 500;
     padding-left: 20px;
@@ -141,8 +168,6 @@ button{
 .left-side {
     margin-bottom: 20px;
     margin-left: 20px;
-	max-width: 20em;
-    min-width: 10px;
 	background-color: #fff;
 	padding: 1.125em 1.5em;
 	font-size: 1em;
@@ -150,14 +175,19 @@ button{
     box-shadow:	0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
     border-bottom-color: #fff;
 	filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, .1));
+    width: fit-content;
+    display: flex;
 }
 
 .right-side {
 	position: relative;
-    margin-left: 70%;
+
+    display: flex;
+    justify-content: right;
+    margin-left: 65%;
+    width: auto;
     margin-bottom: 20px;
-	max-width: 20em;
-    min-width: 10px;
+
 	background-color: rgb(151, 178, 250);
 	padding: 1.125em 1.5em;
 	font-size: 1em;
@@ -165,14 +195,7 @@ button{
     box-shadow:	0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
     border-bottom-color: rgb(151, 178, 250);
 	filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, .1));
-}
-.left-screen{
-    float: left;
-    
-}
-.right-screen{
-    float: right;
-    
+
 }
 textarea.ant-input{
     transform: translateY(5px);
@@ -200,4 +223,18 @@ textarea.ant-input{
 .empty-chat{
     transform: translateY(130px);
     opacity: 70%;
+}
+.add-friends{
+    transform: translate(280px,15px);
+}
+.add-button{
+    float: right;
+    transform: translateY(-35px);
+    margin-right: 10px;
+}
+input{
+    margin-right: 10px;
+}
+.escape{
+    transform: translate(90%,-20px);
 }
