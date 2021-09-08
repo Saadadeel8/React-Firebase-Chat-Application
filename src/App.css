@@ -37,10 +37,6 @@ img {
  
 }
 
-.App {
-  text-align: center;
-}
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -72,6 +68,6 @@ img {
 }
 
 .ant-input-group{
-  transform: translate(-25px, 15px);
+  transform: translate(22px,-18px);
   width: 250px;
 }

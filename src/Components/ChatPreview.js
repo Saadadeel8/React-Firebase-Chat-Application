@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Styles/chat.css';
-import { Input, Search, Empty, Tooltip, Button } from 'antd';
+import { Input, Search, Empty, Tooltip, Button, notification, Divider, Space } from 'antd';
 import firebase from "firebase/app";
 import 'firebase/auth';
 import 'firebase/firestore';
-import { SendOutlined, LogoutOutlined, PoweroffOutlined} from '@ant-design/icons';
+import { SendOutlined, LogoutOutlined, PoweroffOutlined, UserAddOutlined, SearchOutlined, CloseOutlined} from '@ant-design/icons';
 import { auth, db } from './Services/base';
 import {
     Link,
@@ -19,12 +19,35 @@ const ChatPreview = ({user}) => {
     const [friendList, setFriendList] = useState([]); //Friend list results
     const [searchList, setSearchList] = useState([]); //Search results
     const [searchResult, setSearchResult] = useState(false); //Trigger to display search results
+    const [searchBar, setSearchBar] = useState(false);
     const [search, setSearch] = useState(''); //Text to search for someone
     const [text, setText] = useState(''); //Save text from textbox
     const [receiver, setReceiver] = useState(''); //Data of contact/receiver
     const [messages, setMessages] = useState([]); //Container for messages
     const [selectedFriend, setSelectedFriend] = useState(''); //highlightling selected friend
+    const [friendNotification, setFriendNotification] = useState(false)
+    const messageEl = useRef(null);
+
+    const Context = React.createContext({ name: 'Default' });
+    const [api, contextHolder] = notification.useNotification();
+
+    const openNotification = placement => {
+        api.info({
+        message: `Notification ${placement}`,
+        description: <Context.Consumer>{({ name }) => `Hello, ${name}!`}</Context.Consumer>,
+        placement,
+        });
+    };
     const docRef = (receiver) => [user.displayName, receiver].sort().join("-");
+
+    useEffect(() => {
+        if (messageEl) {
+          messageEl.current.addEventListener('DOMNodeInserted', event => {
+            const { currentTarget: target } = event;
+            target.scroll({ top: target.scrollHeight, behavior: 'smooth' });
+          });
+        }
+      }, [])
 
     useEffect(() => {
         // Get all Messages from documents
@@ -97,11 +120,10 @@ const ChatPreview = ({user}) => {
                 uid: contact.uid,
                 })
             });
-            // Clear input field
-            console.log('Contact Added')
+            message.info(`${contact.Name} successfully added as friend}`)
             const { uid, displayName, photoURL } = user;
 
-        const newChat = db.collection('messages').doc(docRef(receiver));
+        const newChat = db.collection('messages').doc(docRef(contact.Name));
             // Add new message in Firestore
             newChat.set({
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -118,23 +140,43 @@ const ChatPreview = ({user}) => {
         setReceiver(friend.Name)
         setSelectedFriend(friend.uid)
     }
-   
+   const escapeButton = (e) => {
+    setSearchResult(false)
+    setSearchBar(false)
+   }
     return (
         <div className='chat-screen'>
             <div className='chat-history'>
-                <div className='search-bar'>
+                <div className='menu-bar'>
                     <div className='logout'>
                     <Tooltip title='Logout'>
                         <Button shape='circle' icon={<PoweroffOutlined /> } onClick={handleLogout}/>
                     </Tooltip>
                     </div>
-                    <Search placeholder="Enter Friend's Fullname" allowClear style={{ width: 200}} onChange={(e)=> setSearch(e.target.value)} onSearch={(e)=> setSearchResult(!searchResult)}/>
+                    <div className='add-friends'>
+                    <Tooltip title='Add Friends'>
+                        <Button shape='circle' icon={<UserAddOutlined /> } onClick={(e)=>setSearchBar(!searchBar)}/>
+                    </Tooltip>
+                    </div>
+                    {searchBar==true? <div className='search-bar'>
+                        <input placeholder="Search a User to Add" allowClear style={{ width: 200}} onChange={(e)=> setSearch(e.target.value)} />
+                        <Tooltip title='Search User'>
+                        <Button shape='circle' icon={<SearchOutlined /> } disable={!search} onClick={(e)=> setSearchResult(!searchResult)}/>
+                        </Tooltip>
+                    </div> : null}
                 </div>
                 
                 {searchResult==true? 
                 <div className='gap'>
+                    <div className='escape'><Button shape='circle' size='small' icon={<CloseOutlined /> } onClick={escapeButton}/></div>
                     {searchList.filter(user => user.Name.toLowerCase().includes(search)).map((contact, index) => (
-                        <div className='show-friend' onClick={()=>addFriend(contact)} key={index}><h2>{contact.Name}</h2></div>
+                        <div className='all-users' key={index}>
+                            <h2>{contact.Name}</h2>
+                            <div className='add-button'>
+                            <Button onClick={()=>addFriend(contact)} >
+                            Add as Friend
+                            </Button>
+                            </div></div>
                     ))}
                 </div> 
                 :<div className='gap'>
@@ -143,14 +185,17 @@ const ChatPreview = ({user}) => {
                         key={index}><h2>{friend.Name}</h2></div>
                     ))}
                 </div>}
+                
             </div>
             <div className='chat-section'>
-                <div className='chat-messages'>
+                <div className='chat-messages' ref={messageEl}>
                    <h1><div className='receiver-info'>{receiver}</div></h1>
-                    {receiver.length ? 
+                    <div className='chat-bubbles'>{receiver.length ? 
                     messages.map((message, index) => (
                     <div key={index} className={message.displayName === user.displayName ? 'right-side'
                     : message.displayName === receiver ? 'left-side'
+                    : null } style={message.displayName === user.displayName ? {alignContent: 'right'}
+                    : message.displayName === receiver ? {alignContent: 'left'}
                     : null }>
                     <p>{message.text}</p>
                     </div>
@@ -161,12 +206,13 @@ const ChatPreview = ({user}) => {
                         Select a Friend to start chatting
                       </span>
                     }
-                  /></div>} 
+                  /></div>}
+                  </div>
                 </div>
                 
                 <div className='chat-typing'>
                 <form onSubmit={handleMessage}>
-                    <div className='text-area'><TextArea value={text} onChange={(e) => setText(e.target.value)} placeholder='Enter Message' /></div>
+                    <div className='text-area'><TextArea value={text} onChange={(e) => setText(e.target.value)} placeholder='Enter Message' onPressEnter={handleMessage} autoFocus/></div>
                     <div className='send-icon'><button type='submit' disabled={!text}><SendOutlined /></button></div>
                 </form>
                 </div>
