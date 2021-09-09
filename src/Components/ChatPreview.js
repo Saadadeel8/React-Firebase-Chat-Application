@@ -109,6 +109,14 @@ const ChatPreview = ({user}) => {
                 uid: contact.uid,
                 })
             });
+        const addFriendBack = db.collection('users').doc(contact.id)
+            addFriendBack.update({
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            Contacts: firebase.firestore.FieldValue.arrayUnion({
+                Name: user.Name,
+                uid: user.uid,
+                })
+            });
             message.info(`${contact.Name} successfully added as friend}`)
             const { uid, displayName, photoURL } = user;
 
