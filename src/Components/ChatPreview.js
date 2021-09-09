@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from 'react';
 import './Styles/chat.css';
-import { Input, Search, Empty, Tooltip, Button, notification, Divider, Space } from 'antd';
+import { Input, Search, Empty, Tooltip, Button, message } from 'antd';
 import firebase from "firebase/app";
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -25,19 +25,8 @@ const ChatPreview = ({user}) => {
     const [receiver, setReceiver] = useState(''); //Data of contact/receiver
     const [messages, setMessages] = useState([]); //Container for messages
     const [selectedFriend, setSelectedFriend] = useState(''); //highlightling selected friend
-    const [friendNotification, setFriendNotification] = useState(false)
     const messageEl = useRef(null);
 
-    const Context = React.createContext({ name: 'Default' });
-    const [api, contextHolder] = notification.useNotification();
-
-    const openNotification = placement => {
-        api.info({
-        message: `Notification ${placement}`,
-        description: <Context.Consumer>{({ name }) => `Hello, ${name}!`}</Context.Consumer>,
-        placement,
-        });
-    };
     const docRef = (receiver) => [user.displayName, receiver].sort().join("-");
 
     useEffect(() => {
@@ -161,7 +150,7 @@ const ChatPreview = ({user}) => {
                     {searchBar==true? <div className='search-bar'>
                         <input placeholder="Search a User to Add" allowClear style={{ width: 200}} onChange={(e)=> setSearch(e.target.value)} />
                         <Tooltip title='Search User'>
-                        <Button shape='circle' icon={<SearchOutlined /> } disable={!search} onClick={(e)=> setSearchResult(!searchResult)}/>
+                        <Button shape='circle' icon={<SearchOutlined /> } size='small' disable={!search} onClick={(e)=> setSearchResult(!searchResult)}/>
                         </Tooltip>
                     </div> : null}
                 </div>
@@ -215,10 +204,8 @@ const ChatPreview = ({user}) => {
                 </div>
                 
                 <div className='chat-typing'>
-                <form onSubmit={handleMessage}>
-                    <div className='text-area'><TextArea value={text} onChange={(e) => setText(e.target.value)} placeholder='Enter Message' onPressEnter={handleMessage} autoFocus/></div>
-                    <div className='send-icon'><button type='submit' disabled={!text}><SendOutlined /></button></div>
-                </form>
+                    <div className='text-area'><TextArea value={text} onChange={(e) => setText(e.target.value)} placeholder='Enter Message' autoSize={{ minRows: 2, maxRows: 4 }} onPressEnter={handleMessage} autoFocus/></div>
+                    <div className='send-icon'><button type='submit' onClick={(e) => handleMessage(text)} disabled={!text}><SendOutlined /></button></div>
                 </div>
             </div>
         </div>
