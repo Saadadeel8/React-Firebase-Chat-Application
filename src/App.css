@@ -4,15 +4,15 @@
 h1 {
   font-family:'Montserrat', 'sans-serif';
 }
+.Interface{
+  display: flex;
+  width: 94%;
+}
 label {
   margin-bottom: 30px;
 }
 .stock-image {
-  float: right;
-  transform: translate(10%, -100%);
-  width: 100%;
-  z-index:-1;
-  position:relative;
+  margin: 3% 0 0 0;
 }
 img {
   border-radius: 0 10px 10px 0;

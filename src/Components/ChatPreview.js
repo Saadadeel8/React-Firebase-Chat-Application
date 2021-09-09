@@ -142,17 +142,18 @@ const ChatPreview = ({user}) => {
                         <Button shape='circle' icon={<PoweroffOutlined /> } onClick={handleLogout}/>
                     </Tooltip>
                     </div>
+                    
+                    {searchBar==true? <div className='search-bar'>
+                        <input placeholder="Search a User to Add" onChange={(e)=> setSearch(e.target.value)} />
+                        <Tooltip title='Search User'>
+                        <div className='search-button'><Button shape='circle' icon={<SearchOutlined /> } size='small' onClick={(e)=> setSearchResult(!searchResult)}/></div>
+                        </Tooltip>
+                    </div> : null}
                     <div className='add-friends'>
                     <Tooltip title='Add Friends'>
                         <Button shape='circle' icon={<UserAddOutlined /> } onClick={(e)=>setSearchBar(!searchBar)}/>
                     </Tooltip>
                     </div>
-                    {searchBar==true? <div className='search-bar'>
-                        <input placeholder="Search a User to Add" allowClear style={{ width: 200}} onChange={(e)=> setSearch(e.target.value)} />
-                        <Tooltip title='Search User'>
-                        <Button shape='circle' icon={<SearchOutlined /> } size='small' disable={!search} onClick={(e)=> setSearchResult(!searchResult)}/>
-                        </Tooltip>
-                    </div> : null}
                 </div>
                 
                 {searchResult==true? 
