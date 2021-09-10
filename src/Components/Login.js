@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import firebase from "firebase/app";
 import 'firebase/auth';
@@ -19,8 +19,8 @@ const Login = () => {
     auth.signInWithEmailAndPassword(values.email, values.password)
     .then((userCredential) => {
     // Signed in
-    
     history.push('/ChatPreview');
+    message.info(`Successfully Logged In`)
     var user = userCredential.user;
     console.log(user);
     })

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Alert } from 'antd';
+import { Form, Input, Button, Alert, message } from 'antd';
 import firebase from "firebase/app";
 import "firebase/auth";
 import { db,auth } from './Services/base';
@@ -25,7 +25,7 @@ const Signup = () => {
         displayName: fullname,
         phoneNumber: phone,
       });
-      alert('Signed up successfully')
+      message.info(`Successfully Signed Up`)
       db.collection("users").doc(user.uid).set({
         uid: user.uid,
         Name: fullname,

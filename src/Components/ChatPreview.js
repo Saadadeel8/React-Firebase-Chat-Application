@@ -109,16 +109,10 @@ const ChatPreview = ({user}) => {
                 uid: contact.uid,
                 })
             });
-        const addFriendBack = db.collection('users').doc(contact.id)
-            addFriendBack.update({
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            Contacts: firebase.firestore.FieldValue.arrayUnion({
-                Name: user.Name,
-                uid: user.uid,
-                })
-            });
-            message.info(`${contact.Name} successfully added as friend}`)
-            const { uid, displayName, photoURL } = user;
+        
+            message.info(`${contact.Name} successfully added as friend`)
+
+        const { uid, displayName, photoURL } = user;
 
         const newChat = db.collection('messages').doc(docRef(contact.Name));
             // Add new message in Firestore
@@ -152,7 +146,7 @@ const ChatPreview = ({user}) => {
                     </div>
                     
                     {searchBar==true? <div className='search-bar'>
-                        <input placeholder="Search a User to Add" onChange={(e)=> setSearch(e.target.value)} />
+                        <Input style={{width: '90%'}, {margin: '0 5px -5px 0'}} placeholder="Search a User to Add" onChange={(e)=> setSearch(e.target.value)} />
                         <Tooltip title='Search User'>
                         <div className='search-button'><Button shape='circle' icon={<SearchOutlined /> } size='small' onClick={(e)=> setSearchResult(!searchResult)}/></div>
                         </Tooltip>

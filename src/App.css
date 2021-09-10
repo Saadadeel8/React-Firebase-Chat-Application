@@ -7,6 +7,7 @@ h1 {
 .Interface{
   display: flex;
   width: 94%;
+  overflow: hidden;
 }
 label {
   margin-bottom: 30px;
@@ -60,6 +61,7 @@ img {
 }
 .App{
   text-align: center;
+  overflow: hidden;
 }
 .App-link {
   color: #61dafb;
