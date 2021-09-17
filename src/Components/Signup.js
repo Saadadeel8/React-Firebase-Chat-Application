@@ -1,18 +1,41 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Alert, message } from 'antd';
+import { Form, Input, Button, message, Upload, Image, } from 'antd';
+import ImgCrop from 'antd-img-crop';
 import firebase from "firebase/app";
 import "firebase/auth";
-import { db,auth } from './Services/base';
+import "firebase/storage";
+import { db, auth, storageRef } from './Services/base';
 import preview from './preview.jpg';
 import {
     Link,
     useHistory
   } from "react-router-dom";
-
+  
 const Signup = () => {
 
   const history = useHistory();
   const [fields, setFields] = useState([{name: ['username'], value: '',},]);
+  const [fileList, setFileList] = useState([
+  ]);
+  
+  const onPreview = async file => {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow.document.write(image.outerHTML);
+  };
+
+  const onChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
 
   const handleSubmit = (values) => { 
     const {email, password, fullname, phone} = values
@@ -21,33 +44,46 @@ const Signup = () => {
     .then((userCredential) => {
       // Signed in 
       const user = userCredential.user;
-      user.updateProfile({
-        displayName: fullname,
-        phoneNumber: phone,
-      });
-      message.info(`Successfully Signed Up`)
-      db.collection("users").doc(user.uid).set({
-        uid: user.uid,
-        Name: fullname,
-        Contacts:[]
-      })
-      .then(() => {
-          console.log("Document successfully written!");
-      })
-      .catch((error) => {
-          console.error("Error writing document: ", error);
-      });
-      history.push('/Login')
-      })
-    .catch((error) => {
-      console.log(error)
-    })};
-    
+
+      const uploadTask = storageRef.ref(`users/${user.uid}`).child('Display Picture').put(fileList[0].originFileObj);
+      uploadTask.on('state_changed',
+      (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+      },
+      (error) => {
+          // Handle unsuccessful uploads
+          console.log("error:-", error)
+      },
+      () => {
+          // Handle successful uploads on complete
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+              console.log('File available at', downloadURL);
+              user.updateProfile({
+                displayName: fullname,
+                phoneNumber: phone,
+                photoURL: downloadURL
+              });
+              message.info(`Successfully Signed Up`)
+              db.collection("users").doc(user.uid).set({
+                uid: user.uid,
+                Name: fullname,
+                Contacts:[],
+                photoURL: downloadURL
+              }).then(() => {
+                history.push('/Login')
+              }).catch((error) => {
+                  console.error("Error writing document: ", error);
+              }); 
+              });
+
+          });
+      }
+  )};
+
   const CustomizedForm = () => ( 
     <div>
-      <label>
-        <h1>User Sign Up</h1>
-      </label>
+      
       <Form
         name="global_state"
         layout="inline"
@@ -127,6 +163,19 @@ const Signup = () => {
   return (
     <div className='Interface'>
       <div className='user-form'>
+        <h1>User Sign Up</h1>
+        <div className='image-upload'>
+          <ImgCrop rotate>
+            <Upload
+              listType="picture-card"
+              fileList={fileList}
+              onChange={onChange}
+              onPreview={onPreview}
+            >
+              {fileList.length < 1 && '+ Upload'}
+            </Upload>
+          </ImgCrop>
+        </div>
       <CustomizedForm
         fields={fields}
         onChange={(newFields) => {
