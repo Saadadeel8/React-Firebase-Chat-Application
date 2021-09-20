@@ -4,21 +4,51 @@
 h1 {
   font-family:'Montserrat', 'sans-serif';
 }
+
 .Interface{
   display: flex;
   width: 94%;
   overflow: hidden;
 }
+
 label {
   margin-bottom: 30px;
 }
+
 .stock-image {
   margin: 3% 0 0 0;
 }
+
 img {
   border-radius: 0 10px 10px 0;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
+
+.display-picture{
+  cursor: pointer;
+  margin-bottom: 10px;
+  border-radius: 50%;
+}
+
+.display-picture .ant-upload.ant-upload-select-picture-card{
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  transform: translateY(-5%);
+}
+
+.display-picture .ant-upload-list-picture-card .ant-upload-list-item-thumbnail, .display-picture .ant-upload-list-picture-card .ant-upload-list-item-thumbnail img{
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  transform: translateY(-5%);
+  border-color: none;
+}
+
+.display-picture .ant-upload-list-picture .ant-upload-list-item, .ant-upload-list-picture-card .ant-upload-list-item{
+  border: none;
+}
+
 .user-form{
   font-family:'Montserrat', 'sans-serif';
   display: flex;
@@ -35,7 +65,6 @@ img {
   height: 600px;
   border-radius: 10px 0 0 10px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
- 
 }
 
 .App-logo {
@@ -59,20 +88,20 @@ img {
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
 .App{
   text-align: center;
   overflow: hidden;
 }
+
 .App-link {
   color: #61dafb;
 }
+
 .ant-form-inline{
-  display: block;
+  display: block
 }
-.ant-input-group{
-  transform: translate(22px,-18px);
-  width: 250px;
-}
+
 ::-webkit-scrollbar {
   width: 20px;
 }
@@ -99,4 +128,9 @@ img {
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
+}
+
+.avatar-uploader > .ant-upload {
+  width: 128px;
+  height: 128px;
 }
